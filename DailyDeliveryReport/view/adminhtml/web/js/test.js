@@ -1,0 +1,3 @@
+function newWindow() {
+    alert("test");
+}

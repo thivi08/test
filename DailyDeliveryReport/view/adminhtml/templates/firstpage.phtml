@@ -1,0 +1,167 @@
+<?php
+/** 
+ * @package   COP_DailyDeliveryReport
+ * @author    Ricky Thakur (Kapil Dev Singh)
+ * @copyright Copyright (c) 2018 Ricky Thakur
+ * @license   MIT license (see LICENSE.txt for details)
+ */
+?>
+<p>My First Magento 2 Admin Page!</p>
+
+<?php
+//$Address = $block->getShippingAdress();
+//foreach ($Address as $shippingAddress) {
+//    $street = $shippingAddress['street'];
+//    $city = $shippingAddress['city'];
+//    $state = $shippingAddress['region'];
+//    $post_code = $shippingAddress['postcode'];
+//
+//    $addresses[] = $street . "," . $city . "," . $state . "," . $post_code;
+//}
+//echo json_encode($addresses);
+//echo "<pre>";print_r($Address); echo "</pre>";
+$addresses[] = "Jewelsford Road, Wentworthville, NSW, 2145";
+$addresses[] = "61 Peachtree Avenue, Constitution Hill, NSW, 2145";
+$addresses[] = "7 Charles St, Parramatta, NSW, 2150";
+$addresses[] = "30 Pitt St, Parramatta, NSW, 2150";
+
+$myaddress = json_encode($addresses);
+
+echo $myaddress;
+
+?>
+
+<button type="button" class="clickme">Click Me!</button>
+
+
+
+<script>
+    requirejs(['jquery', 'dailydeliveryreport-js'], function($){
+        // Your Code
+        $(".clickme").on("click",function(){
+            var w = window.open('', 'PRINT');
+            var head = w.document.getElementsByTagName('head')[0];
+
+            w.document.head.innerHTML = '<title>Map</title></head>';
+            w.document.body.innerHTML = '<body><div id="map_canvas" style="height: 100%;"></div><br><div id="directions-panel" style="border-style: ridge; border-radius: 5px; background-color: LightGray;"></div></body>';
+            // var test = ["Jewelsford Road,Wentworthville,NSW,2145", "Park Street,NORTHMEAD,NSW,2152", "30 Pitt St, Parramatta, NSW, 2150", "7 Charles St, Parramatta, NSW, 2150"];
+
+
+
+            var loadScript = w.document.createElement('script');
+
+            loadScript.type = "text/javascript";
+            loadScript.async = true;
+            loadScript.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAqtpsJ4CNF-CMJQJsxEP0pMpNg998-WQs&callback=initialize";
+
+            var googleMapScript = w.document.createElement('script');
+
+            googleMapScript.type = "text/javascript";
+            googleMapScript.async = false;
+
+
+            googleMapScript.text = 'function initialize() {' +
+                'var directionsService = new google.maps.DirectionsService;' +
+                'var directionsDisplay = new google.maps.DirectionsRenderer;' +
+                'var mapOptions = {center: new google.maps.LatLng(-33.8212349,150.9999303),zoom: 14}; ' +
+                'var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);' +
+                'directionsDisplay.setMap(map);' +
+                'calculateAndDisplayRoute(directionsService, directionsDisplay);' +
+
+                'var geocoder = new google.maps.Geocoder();' +
+                //'var mainaddress = "10 Hunter Street PARRAMATTA NSW 2150";' +
+                'var mainmarker = new google.maps.Marker({' +
+                '            position: new google.maps.LatLng(-33.8149217,150.99901639999996),' +
+                '            map: map,' +
+                '  icon: "http://maps.google.com/mapfiles/kml/pal2/icon5.png",' +
+                '            title: "Head Office"' +
+                '    });' +
+                'var addresses= <?php echo $myaddress; ?>;' +
+                // 'var addresses = ["Jewelsford Road,Wentworthville,NSW,2145", "Park Street,NORTHMEAD,NSW,2152", "30 Pitt St, Parramatta, NSW, 2150", "7 Charles St, Parramatta, NSW, 2150"];\n' +
+                // 'var addresses = '+response+';' +
+                'for (var x = 0; x < addresses.length; x++) {' +
+                '          geocodeAddress(geocoder, addresses[x], map);' +
+                '        }' +
+                // '        if (navigator.geolocation) {' +
+                // '          navigator.geolocation.getCurrentPosition(function(position) {' +
+                // '            initialLocation = new google.maps.LatLng(' +
+                // '              position.coords.latitude,' +
+                // '              position.coords.longitude' +
+                // '            );' +
+                // '            map.setCenter(initialLocation);' +
+                // '          });' +
+                // '        }' +
+                ' }' +
+
+                'function geocodeAddress(geocodera, address, resultsMap) {' +
+                // ' var address = document.getElementById("address").value;' +
+                ' geocodera.geocode({ address: address }, function(results, status) {' +
+                '          if (status === "OK") {' +
+                //'alert("my ok");' +
+                '            resultsMap.setCenter(results[0].geometry.location);' +
+                // '            var marker = new google.maps.Marker({' +
+                // '            map: resultsMap,' +
+                // '              position: results[0].geometry.location,' +
+                // '  icon: "https://maps.google.com/mapfiles/ms/icons/green.png",' +
+                // 'title: address,' +
+                // '            });' +
+                '          } else {' +
+                '            alert(' +
+                '              "Geocode was not successful for the following reason: " + status' +
+                '            );' +
+                '          }' +
+                '        });' +
+                '}' +
+                'function calculateAndDisplayRoute(directionsService, directionsDisplay) {' +
+                'var waypts = [];' +
+                'var addresslist= <?php echo $myaddress; ?>;' +
+                // ' var addresslist = ["Jewelsford Road,Wentworthville,NSW,2145", "Park Street,NORTHMEAD,NSW,2152", "30 Pitt St, Parramatta, NSW, 2150", "7 Charles St, Parramatta, NSW, 2150"];\n' +
+                // 'var addresslist = '+response+';' +
+                'for (var j = 0; j < addresslist.length; j++) {' +
+                //'alert(addresslist[j]);' +
+                'waypts.push({location: addresslist[j] });' +
+                '        }' +
+                'directionsService.route({' +
+                '          origin: "10 Hunter Street PARRAMATTA NSW 2150",' +
+                '          destination: "-33.814833, 150.997707",' +
+                '          waypoints: waypts,' +
+                '          optimizeWaypoints: true,' +
+                '          travelMode: "DRIVING"' +
+                '        },' +
+                'function(response, status) {' +
+                ' if (status === "OK") {' +
+                '            directionsDisplay.setDirections(response);' +
+                '            var route = response.routes[0];' +
+                '            var summaryPanel = document.getElementById(\'directions-panel\');\n' +
+                '            summaryPanel.innerHTML = \'<h2 style="text-align: center; text-decoration: underline;">Route Details</h2>\';\n' +
+                '            for (var i = 0; i < route.legs.length; i++) {\n' +
+                '              var routeSegment = i + 1;\n' +
+                '              summaryPanel.innerHTML += "<h3><b>Location: " + routeSegment +\n' +
+                '                  \'</b></h3>\';\n' +
+                '              summaryPanel.innerHTML += route.legs[i].start_address + \' to \';\n' +
+                '              summaryPanel.innerHTML += route.legs[i].end_address + \'<br>\';\n' +
+                //'              summaryPanel.innerHTML += "<b>Total Time Duration: </b>" +route.legs[i].duration.text + \'<br>\';' +
+                '              summaryPanel.innerHTML +="<b>Total Distance: </b>" + route.legs[i].distance.text + \'<br><br>\';\n' +
+
+                'for (var j = 0; j < route.legs[i].steps.length; j++) {' +
+                '              summaryPanel.innerHTML +="<li>" + route.legs[i].steps[j]["instructions"]+ "  ( "+route.legs[i].steps[j]["distance"]["text"]+" -- "+route.legs[i].steps[j]["duration"]["text"]+" )"+"</li><br>";' +
+                //'console.log(route.legs[i].steps[j]["instructions"]);' +
+                '}' +
+
+                '            }' +
+                '}' +
+                'else {' +
+                '            window.alert("Directions request failed due to " + status);' +
+                '          }' +
+                '});' +
+
+                '}'
+
+            head.appendChild(loadScript);
+            head.appendChild(googleMapScript);
+
+            alert("Success!!!");
+        });
+    });
+
+</script>

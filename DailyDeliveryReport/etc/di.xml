@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/** 
+ * @package   COP_DailyDeliveryReport
+ * @author    Ricky Thakur (Kapil Dev Singh)
+ * @copyright Copyright (c) 2018 Ricky Thakur
+ * @license   MIT license (see LICENSE.txt for details)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="dailydeliveryreport_entity_list_data_source" xsi:type="string">COP\DailyDeliveryReport\Model\ResourceModel\Entity\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="COP\DailyDeliveryReport\Model\ResourceModel\Entity\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">cop_daily_delivery_report</argument>
+            <argument name="resourceModel" xsi:type="string">COP\DailyDeliveryReport\Model\ResourceModel\Entity</argument>
+        </arguments>
+    </virtualType>
+</config>
